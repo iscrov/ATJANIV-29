@@ -1,0 +1,72 @@
+package ua.org.oa.grishin;
+
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class AnalyzerText_v1 {
+	static StringBuilder sb = new StringBuilder();
+
+	public static void main(String[] args) {
+		System.out.println("Добро пожаловать в \"Анализатор текста\"");
+		System.out.println("Выберите вариант анализа текста.");
+		System.out.println("1 --> анализ файла");
+		System.out.println("2 --> анализ введенного текста");
+		Scanner input = new Scanner(System.in);
+		switch (input.nextLine()) {
+		case "1":
+			consoleOutput();
+			break;
+		case "2":
+			System.out.println("Vvedi stroky");
+			sb.append(input.nextLine());
+			break;
+		default:
+			break;
+		}
+		analyzeText();
+	}
+
+	private static void consoleOutput() {
+		String str2 = "file.txt";
+		Scanner scanner = new Scanner(AnalyzerText_v1.class.getResourceAsStream(str2));
+		while (scanner.hasNextLine()) {
+			String nextLine = scanner.nextLine();
+			System.out.println(nextLine);
+			sb.append(nextLine);
+		}
+		scanner.close();
+	}
+
+	public static boolean checkWithRegExpSoglasnue(String userNameString) {
+		Pattern p = Pattern
+				.compile("^[б-д ж з к-н п-т ф-ъ ь]|[Б-Д Ж З К-Н П-Т Ф-Ъ Ь]|[B-D F-H J-N P-T V-X Z]|[b-d f-h j-n p-t v-x z]");
+		Matcher m = p.matcher(userNameString);
+		return m.matches();
+	}
+
+	public static boolean checkWithRegExpGlasnue(String userNameString) {
+		Pattern p = Pattern.compile("^а|е|ё|и|о|у|ы|э|ю|я");
+		Matcher m = p.matcher(userNameString);
+		return m.matches();
+	}
+
+	public static void analyzeText() {
+		int count = 0;
+		for (int i = 0; i < sb.length(); i++) {
+			if (checkWithRegExpSoglasnue(sb.substring(i, i + 1))) {
+				count++;
+			}
+		}
+
+		System.out.println("Soglasnuh v tekste : " + count);
+
+		int fount = 0;
+		for (int i = 0; i < sb.length(); i++) {
+			if (checkWithRegExpGlasnue(sb.substring(i, i + 1))) {
+				fount++;
+			}
+		}
+		System.out.println("Glasnuh v tekste : " + fount);
+	}
+}
